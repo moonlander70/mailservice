@@ -5,6 +5,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class EmailGateway {
+
+
+
     public void sendEmail(final Email email) {
+
+
+
+
+
     }
 }
