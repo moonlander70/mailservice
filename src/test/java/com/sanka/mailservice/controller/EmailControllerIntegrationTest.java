@@ -3,6 +3,7 @@ package com.sanka.mailservice.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sanka.mailservice.model.EmailRequest;
 import com.sanka.mailservice.service.EmailService;
+import lombok.val;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,11 @@ class EmailControllerIntegrationTest {
     @Test
     @DisplayName("GIVEN 'from' does not exist EXPECT a 400 bad request with Validation Error msg")
     void test_noFrom() throws Exception {
-        final EmailRequest emailRequest = EmailRequest.builder().build();
+        val emailRequest = EmailRequest.builder()
+                .to(Set.of("test@test.com"))
+                .message("Hi there")
+                .subject("test")
+                .build();
 
         mockMvc.perform(post("/emails")
                 .content(mapper.writeValueAsString(emailRequest))
@@ -56,8 +61,11 @@ class EmailControllerIntegrationTest {
     @Test
     @DisplayName("GIVEN 'from' is not in the email format EXPECT a 400 bad request with email validation error")
     void from_notEmail() throws Exception {
-        final EmailRequest emailRequest = EmailRequest.builder()
+        val emailRequest = EmailRequest.builder()
                 .from("test.test.com")
+                .to(Set.of("test@test.com"))
+                .message("Hi there")
+                .subject("test")
                 .build();
 
         mockMvc.perform(post("/emails")
@@ -72,9 +80,11 @@ class EmailControllerIntegrationTest {
     @Test
     @DisplayName("GIVEN the 'to' has invalid email formats EXPECT a 400 Bad Request with email validation error")
     void to_notEmail() throws Exception {
-        final EmailRequest emailRequest = EmailRequest.builder()
+        val emailRequest = EmailRequest.builder()
                 .from("test@test.com")
                 .to(Set.of("test.test.com","test@test.com"))
+                .message("Hi there")
+                .subject("test")
                 .build();
 
         mockMvc.perform(post("/emails")
@@ -86,28 +96,31 @@ class EmailControllerIntegrationTest {
 
     }
 
-    // you don't need a 'to' for sending an email, as you can use Cc or Bcc. Service layer
-    // will decide the validation
     @Test
-    @DisplayName("GIVEN 'from' exists and 'to' has no values THEN call the service layer")
+    @DisplayName("GIVEN 'to' has no values EXPECT a 400 Bad Request with email validation error")
     void to_noValues() throws Exception {
-        final EmailRequest emailRequest = EmailRequest.builder()
+        val emailRequest = EmailRequest.builder()
                 .from("test@test.com")
                 .to(Set.of())
+                .message("Hi there")
+                .subject("test")
                 .build();
 
         mockMvc.perform(post("/emails")
                 .content(mapper.writeValueAsString(emailRequest))
-                .contentType(MediaType.APPLICATION_JSON));
-
-        verify(emailService, times(1)).sendEmail(emailRequest);
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.details[0].param", equalTo("to")))
+                .andExpect(jsonPath("$.details[0].msg", equalTo("'to' field cannot be blank or null")));
     }
 
     @Test
     @DisplayName("GIVEN the 'cc' has invalid email formats EXPECT a 400 Bad Request with email validation error")
     void cc_notEmail() throws Exception {
-        final EmailRequest emailRequest = EmailRequest.builder()
+        val emailRequest = EmailRequest.builder()
                 .from("test@test.com")
+                .to(Set.of("test@test.com"))
+                .message("Hi there")
+                .subject("test")
                 .cc(Set.of("test.test.com","test@test.com"))
                 .build();
 
@@ -117,30 +130,16 @@ class EmailControllerIntegrationTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.details[0].param", equalTo("cc[]")))
                 .andExpect(jsonPath("$.details[0].msg", equalTo("must be a well-formed email address")));
-
     }
-
-    @Test
-    @DisplayName("GIVEN 'from' exists and 'cc' has no values THEN call the service layer")
-    void cc_noValues() throws Exception {
-        final EmailRequest emailRequest = EmailRequest.builder()
-                .from("test@test.com")
-                .cc(Set.of())
-                .build();
-
-        mockMvc.perform(post("/emails")
-                .content(mapper.writeValueAsString(emailRequest))
-                .contentType(MediaType.APPLICATION_JSON));
-
-        verify(emailService, times(1)).sendEmail(emailRequest);
-    }
-
 
     @Test
     @DisplayName("GIVEN the 'bcc' has invalid email formats EXPECT a 400 Bad Request with email validation error")
     void bcc_notEmail() throws Exception {
-        final EmailRequest emailRequest = EmailRequest.builder()
+        val emailRequest = EmailRequest.builder()
                 .from("test@test.com")
+                .to(Set.of("test@test.com"))
+                .message("Hi there")
+                .subject("test")
                 .bcc(Set.of("test.test.com","test@test.com"))
                 .build();
 
@@ -150,62 +149,49 @@ class EmailControllerIntegrationTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.details[0].param", equalTo("bcc[]")))
                 .andExpect(jsonPath("$.details[0].msg", equalTo("must be a well-formed email address")));
-
     }
 
     @Test
-    @DisplayName("GIVEN 'from' exists and 'bcc' has no values THEN call the service layer")
+    @DisplayName("GIVEN 'subject' does not exist EXPECT a 400 Bad Request with validation error")
     void bcc_noValues() throws Exception {
-        final EmailRequest emailRequest = EmailRequest.builder()
+        val emailRequest = EmailRequest.builder()
                 .from("test@test.com")
-                .bcc(Set.of())
+                .to(Set.of("test@test.com"))
+                .message("Test Message")
                 .build();
 
         mockMvc.perform(post("/emails")
                 .content(mapper.writeValueAsString(emailRequest))
-                .contentType(MediaType.APPLICATION_JSON));
-
-        verify(emailService, times(1)).sendEmail(emailRequest);
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.details[0].param", equalTo("subject")))
+                .andExpect(jsonPath("$.details[0].msg", equalTo("'subject' cannot be blank or null")));
     }
 
     @Test
-    @DisplayName("GIVEN 'from' exists and 'subject' exists THEN call the service layer")
+    @DisplayName("GIVEN 'message' does not exist EXPECT a 400 Bad Request with validation error")
     void subject_noValue() throws Exception {
-        final EmailRequest emailRequest = EmailRequest.builder()
+        val emailRequest = EmailRequest.builder()
                 .from("test@test.com")
+                .to(Set.of("test@test.com"))
                 .subject("Test Subject")
                 .build();
 
         mockMvc.perform(post("/emails")
                 .content(mapper.writeValueAsString(emailRequest))
-                .contentType(MediaType.APPLICATION_JSON));
-
-        verify(emailService, times(1)).sendEmail(emailRequest);
-    }
-
-    // ASSERTION: it is possible to send emails which don't have a message body.
-    @Test
-    @DisplayName("GIVEN no 'message' exists THEN call the service layer")
-    void message_noValue() throws Exception {
-        final EmailRequest emailRequest = EmailRequest.builder()
-                .from("test@test.com")
-                .to(Set.of("test@test.com"))
-                .build();
-
-        mockMvc.perform(post("/emails")
-                .content(mapper.writeValueAsString(emailRequest))
-                .contentType(MediaType.APPLICATION_JSON));
-
-        verify(emailService, times(1)).sendEmail(emailRequest);
-
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.details[0].param", equalTo("message")))
+                .andExpect(jsonPath("$.details[0].msg", equalTo("'message' cannot be blank or null")));
     }
 
     @Test
-    @DisplayName("GIVEN 'message' exists THEN call the service layer")
+    @DisplayName("GIVEN all required fields  exist THEN call the service layer")
     void message_hasValue() throws Exception {
-        final EmailRequest emailRequest = EmailRequest.builder()
+        val emailRequest = EmailRequest.builder()
                 .from("test@test.com")
                 .to(Set.of("test@test.com"))
+                .subject("Test Subject")
                 .message("Hi, this is a test message")
                 .build();
 

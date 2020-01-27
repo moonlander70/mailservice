@@ -4,6 +4,7 @@ import com.sanka.mailservice.exception.NoRecipientsFoundException;
 import com.sanka.mailservice.gateway.EmailGateway;
 import com.sanka.mailservice.model.Email;
 import com.sanka.mailservice.model.EmailRequest;
+import lombok.val;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -40,10 +41,16 @@ class EmailServiceTest {
     }
 
     @Test
+    @DisplayName("GIVEN emailRequest is null WHEN sendEmail EXPECT an illegalArgumentException")
+    void sendEmail_nullEmailRequest() {
+        assertThrows(IllegalArgumentException.class, () -> emailService.sendEmail(null));
+    }
+
+    @Test
     @DisplayName("GIVEN no email recipients WHEN sendEmail EXPECT NoRecipientsFoundException")
     void sendEmail_noRecipients() {
         // Given
-        final EmailRequest emailRequest = EmailRequest.builder()
+        val emailRequest = EmailRequest.builder()
                 .from("test@test.com")
                 .build();
 
@@ -52,62 +59,31 @@ class EmailServiceTest {
 
     }
 
+    // As per the SendGrid spec, the 'to' field needs to have recipients
     @Test
-    @DisplayName("GIVEN 'to' has email recipients WHEN sendEmail THEN send to email gateway")
+    @DisplayName("GIVEN 'to' has no recipients but 'cc' and 'bbc' have recipients " +
+            "WHEN sendEmail EXPECT NoRecpientsFoundException")
     void sendEmail_hasTo() {
         // Given
-        final EmailRequest emailRequest = EmailRequest.builder()
-                .from("test@test.com")
-                .to(Set.of("test@test.com"))
-                .build();
-
-        // When
-        emailService.sendEmail(emailRequest);
-
-        // Then
-        verify(emailGateway, times(1)).sendEmail(emailCaptor.capture());
-
-        final Email actualEmail = emailCaptor.getValue();
-
-        assertThat(actualEmail.getFrom()).isEqualTo(emailRequest.getFrom());
-        assertThat(actualEmail.getTo()).isEqualTo(emailRequest.getTo());
-        assertThat(actualEmail.getSubject()).isEqualTo(emailRequest.getSubject());
-        assertThat(actualEmail.getMessage()).isEqualTo(emailRequest.getMessage());
-        assertThat(actualEmail.getLocalDateTime()).isEqualToIgnoringSeconds(LocalDateTime.now(ZoneOffset.UTC));
-    }
-
-    @Test
-    @DisplayName("GIVEN 'cc' has email recipients WHEN sendEmail THEN send to email gateway")
-    void sendEmail_hasCc() {
-        // Given
-        final EmailRequest emailRequest = EmailRequest.builder()
+        val emailRequest = EmailRequest.builder()
                 .from("test@test.com")
                 .cc(Set.of("test@test.com"))
+                .bcc(Set.of("other@other.com"))
                 .build();
 
-        // When
-        emailService.sendEmail(emailRequest);
-
         // Then
-        verify(emailGateway, times(1)).sendEmail(emailCaptor.capture());
-
-        final Email actualEmail = emailCaptor.getValue();
-
-        assertThat(actualEmail.getFrom()).isEqualTo(emailRequest.getFrom());
-        assertThat(actualEmail.getCc()).isEqualTo(emailRequest.getCc());
-        assertThat(actualEmail.getSubject()).isEqualTo(emailRequest.getSubject());
-        assertThat(actualEmail.getMessage()).isEqualTo(emailRequest.getMessage());
-        assertThat(actualEmail.getLocalDateTime()).isEqualToIgnoringSeconds(LocalDateTime.now(ZoneOffset.UTC));
-
+        assertThrows(NoRecipientsFoundException.class, () -> emailService.sendEmail(emailRequest));
     }
 
     @Test
-    @DisplayName("GIVEN 'bcc' has email recipients WHEN sendEmail THEN send to email gateway")
+    @DisplayName("GIVEN 'to' has email recipients WHEN sendEmail THEN send to email gateway")
     void sendEmail_hasBcc() {
         // Given
-        final EmailRequest emailRequest = EmailRequest.builder()
+        val emailRequest = EmailRequest.builder()
                 .from("test@test.com")
-                .bcc(Set.of("test@test.com"))
+                .to(Set.of("test@test.com"))
+                .subject("Test")
+                .message("Hi")
                 .build();
 
         // When
@@ -116,14 +92,12 @@ class EmailServiceTest {
         // Then
         verify(emailGateway, times(1)).sendEmail(emailCaptor.capture());
 
-        final Email actualEmail = emailCaptor.getValue();
+        val actualEmail = emailCaptor.getValue();
 
         assertThat(actualEmail.getFrom()).isEqualTo(emailRequest.getFrom());
         assertThat(actualEmail.getBcc()).isEqualTo(emailRequest.getBcc());
         assertThat(actualEmail.getSubject()).isEqualTo(emailRequest.getSubject());
         assertThat(actualEmail.getMessage()).isEqualTo(emailRequest.getMessage());
-        assertThat(actualEmail.getLocalDateTime()).isEqualToIgnoringSeconds(LocalDateTime.now(ZoneOffset.UTC));
-
     }
 
 }

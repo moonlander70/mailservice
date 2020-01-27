@@ -5,7 +5,9 @@ import com.sanka.mailservice.gateway.EmailGateway;
 import com.sanka.mailservice.model.Email;
 import com.sanka.mailservice.model.EmailRequest;
 import lombok.AllArgsConstructor;
+import lombok.val;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
@@ -18,16 +20,16 @@ public class EmailService {
     private EmailGateway emailGateway;
 
     public void sendEmail(final EmailRequest emailRequest) {
+        Assert.notNull(emailRequest, "'emailRequest' cannot be null");
         validateRecipients(emailRequest);
 
-        final Email email = Email.builder()
+        val email = Email.builder()
                 .from(emailRequest.getFrom())
                 .to(emailRequest.getTo())
                 .cc(emailRequest.getCc())
                 .bcc(emailRequest.getBcc())
                 .subject(emailRequest.getSubject())
                 .message(emailRequest.getMessage())
-                .localDateTime(LocalDateTime.now(ZoneOffset.UTC))
                 .build();
 
         emailGateway.sendEmail(email);
@@ -35,10 +37,7 @@ public class EmailService {
     }
 
     private void validateRecipients(final EmailRequest emailRequest) {
-        if (CollectionUtils.isEmpty(emailRequest.getTo())
-                && CollectionUtils.isEmpty(emailRequest.getCc())
-                && CollectionUtils.isEmpty(emailRequest.getBcc())) {
-
+        if (CollectionUtils.isEmpty(emailRequest.getTo())) {
             throw new NoRecipientsFoundException();
         }
 

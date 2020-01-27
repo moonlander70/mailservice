@@ -3,7 +3,6 @@ package com.sanka.mailservice.model;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
 import java.util.Set;
 
 @Builder
@@ -15,6 +14,5 @@ public class Email {
     private Set<String> bcc;
     private String subject;
     private String message;
-    private LocalDateTime localDateTime;
 
 }

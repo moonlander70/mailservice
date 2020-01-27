@@ -63,6 +63,7 @@ public class ExceptionHandlerAdvice {
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ErrorMessage handleException(final NoRecipientsFoundException exception) {
         final List<ErrorDetail> errorDetails = List.of(ErrorDetail.builder()
+                .location("params")
                 .message(exception.getMessage())
                 .build());
 
@@ -71,6 +72,5 @@ public class ExceptionHandlerAdvice {
                 .details(errorDetails)
                 .build();
     }
-
 
 }
