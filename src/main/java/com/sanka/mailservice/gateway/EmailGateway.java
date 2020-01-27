@@ -19,13 +19,13 @@ public class EmailGateway {
         try {
             log.info("sending email via sendGrid {} ", email);
             sendGridClient.sendEmail(email);
+
         } catch (final RestClientException ex) {
             try {
-
-                log.info("sendGrid failed. Attempting to send via  {} ", email);
+                log.info("sendGrid failed. Sending via SendInBlue {} ", email);
                 sendInBlueClient.sendEmail(email);
-            } catch (final RestClientException exNext) {
 
+            } catch (final RestClientException exNext) {
                 throw new ServiceDownException();
 
             }
