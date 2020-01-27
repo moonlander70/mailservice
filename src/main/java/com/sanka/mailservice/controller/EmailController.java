@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(path = "emails")
+@RequestMapping(path = "mail")
 @AllArgsConstructor
 public class EmailController {
 

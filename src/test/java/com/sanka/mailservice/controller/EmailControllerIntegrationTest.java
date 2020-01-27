@@ -47,7 +47,7 @@ class EmailControllerIntegrationTest {
                 .subject("test")
                 .build();
 
-        mockMvc.perform(post("/emails")
+        mockMvc.perform(post("/mail")
                 .content(mapper.writeValueAsString(emailRequest))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
@@ -67,7 +67,7 @@ class EmailControllerIntegrationTest {
                 .subject("test")
                 .build();
 
-        mockMvc.perform(post("/emails")
+        mockMvc.perform(post("/mail")
                 .content(mapper.writeValueAsString(emailRequest))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
@@ -86,7 +86,7 @@ class EmailControllerIntegrationTest {
                 .subject("test")
                 .build();
 
-        mockMvc.perform(post("/emails")
+        mockMvc.perform(post("/mail")
                 .content(mapper.writeValueAsString(emailRequest))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
@@ -105,7 +105,7 @@ class EmailControllerIntegrationTest {
                 .subject("test")
                 .build();
 
-        mockMvc.perform(post("/emails")
+        mockMvc.perform(post("/mail")
                 .content(mapper.writeValueAsString(emailRequest))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.details[0].param", equalTo("to")))
@@ -123,7 +123,7 @@ class EmailControllerIntegrationTest {
                 .cc(Set.of("test.test.com","test@test.com"))
                 .build();
 
-        mockMvc.perform(post("/emails")
+        mockMvc.perform(post("/mail")
                 .content(mapper.writeValueAsString(emailRequest))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
@@ -142,7 +142,7 @@ class EmailControllerIntegrationTest {
                 .bcc(Set.of("test.test.com","test@test.com"))
                 .build();
 
-        mockMvc.perform(post("/emails")
+        mockMvc.perform(post("/mail")
                 .content(mapper.writeValueAsString(emailRequest))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
@@ -159,7 +159,7 @@ class EmailControllerIntegrationTest {
                 .message("Test Message")
                 .build();
 
-        mockMvc.perform(post("/emails")
+        mockMvc.perform(post("/mail")
                 .content(mapper.writeValueAsString(emailRequest))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
@@ -176,7 +176,7 @@ class EmailControllerIntegrationTest {
                 .subject("Test Subject")
                 .build();
 
-        mockMvc.perform(post("/emails")
+        mockMvc.perform(post("/mail")
                 .content(mapper.writeValueAsString(emailRequest))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
@@ -194,7 +194,7 @@ class EmailControllerIntegrationTest {
                 .message("Hi, this is a test message")
                 .build();
 
-        mockMvc.perform(post("/emails")
+        mockMvc.perform(post("/mail")
                 .content(mapper.writeValueAsString(emailRequest))
                 .contentType(MediaType.APPLICATION_JSON));
 
