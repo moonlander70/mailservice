@@ -73,4 +73,15 @@ public class ExceptionHandlerAdvice {
                 .build();
     }
 
+    @ExceptionHandler
+    @ResponseBody
+    @ResponseStatus(value = HttpStatus.BAD_GATEWAY)
+    public ErrorMessage handleException(final ServiceDownException exception) {
+        return ErrorMessage.builder()
+                .details(List.of(ErrorDetail.builder()
+                        .message(exception.getMessage())
+                        .build()))
+                .build();
+    }
+
 }

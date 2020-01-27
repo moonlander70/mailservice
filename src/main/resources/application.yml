@@ -5,5 +5,9 @@ spring:
       write_dates_as_timestamps: false
 
 sendgrid:
-  baseUrl: https://api.sendgrid.com/v3
+  baseUrl: https://api.sendgrid.com/v3/
   apiKey: ${SENDGRID_API_KEY}    # stored as env var locally and in the cloud provider
+
+send-in-blue:
+  baseUrl: https://api.sendinblue.com/v3/
+  apiKey: ${SEND_IN_BLUE_API_KEY}

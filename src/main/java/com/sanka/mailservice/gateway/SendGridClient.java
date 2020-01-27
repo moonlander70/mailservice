@@ -1,18 +1,13 @@
 package com.sanka.mailservice.gateway;
 
 import com.sanka.mailservice.model.Email;
-import com.sanka.mailservice.model.sendgrid.EmailAddress;
-import com.sanka.mailservice.model.sendgrid.Personalization;
-import com.sanka.mailservice.model.sendgrid.SendGridMailRequest;
 import com.sanka.mailservice.utils.MailUtils;
 import lombok.AllArgsConstructor;
 import lombok.val;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
-
-@Component
+@Component("sendGridClient")
 @AllArgsConstructor
 public class SendGridClient implements EmailClient {
 
@@ -24,7 +19,5 @@ public class SendGridClient implements EmailClient {
         sendGridClientTemplate.postForLocation("/mail/send",  sendGridMailRequest);
 
     }
-
-
 
 }

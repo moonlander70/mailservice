@@ -3,6 +3,7 @@ package com.sanka.mailservice.gateway;
 import com.sanka.mailservice.model.Email;
 import lombok.val;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,15 +16,17 @@ class SendGridClientIntegrationTest {
     @Autowired
     private SendGridClient sendGridClient;
 
-    @Disabled
+    // NOTE: with this test, I was manually verifying that I was receiving the email
+    // In actual production code, we would be using Hoverfly or an equivalent capture / simulator
+    // to simulate the HTTP calls
+    @Test
+    @DisplayName("GIVEN all valid inputs THEN ensure the email sends")
     void sendEmail() {
         val email = Email.builder()
-                .from("sheng_ding@baidu.com")
-                .to(Set.of("davidvara28@gmail.com"))
-                .cc(Set.of("michaelvanbrummen@gmail.com"))
-                .bcc(Set.of("moonlander70@gmail.com"))
-                .subject("Hi David Vara")
-                .message("Hi David. I am much more gooder developer than you. I write it businessu ruru")
+                .from("test@hotmail.com")
+                .to(Set.of("moonlander70@gmail.com"))
+                .message("test message")
+                .subject("test")
                 .build();
 
         sendGridClient.sendEmail(email);

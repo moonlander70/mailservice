@@ -38,7 +38,6 @@ class EmailControllerIntegrationTest {
     @MockBean
     private EmailService emailService;
 
-
     @Test
     @DisplayName("GIVEN 'from' does not exist EXPECT a 400 bad request with Validation Error msg")
     void test_noFrom() throws Exception {
