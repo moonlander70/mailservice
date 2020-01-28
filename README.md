@@ -88,7 +88,7 @@ An example is shown below for when all the mandatory fields are missing in the r
     {
       "location": "params",
       "param": "to",
-      "msg": "'to' field cannot be blank or null",
+      "msg": "'to' field cannot be empty or null",
       "value": "null"
     },
     {

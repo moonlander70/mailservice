@@ -22,7 +22,7 @@ public class EmailRequest {
     @NotBlank(message = "'from' cannot be blank or null")
     private String from;
 
-    @NotEmpty(message = "'to' field cannot be blank or null")
+    @NotEmpty(message = "'to' field cannot be empty or null")
     private Set<@Email String> to;
 
     private Set<@Email String> cc;

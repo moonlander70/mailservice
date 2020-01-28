@@ -109,7 +109,7 @@ class EmailControllerIntegrationTest {
                 .content(mapper.writeValueAsString(emailRequest))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.details[0].param", equalTo("to")))
-                .andExpect(jsonPath("$.details[0].msg", equalTo("'to' field cannot be blank or null")));
+                .andExpect(jsonPath("$.details[0].msg", equalTo("'to' field cannot be empty or null")));
     }
 
     @Test
