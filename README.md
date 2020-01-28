@@ -78,10 +78,10 @@ Json Deserialization error which is difficult to read. Another example is where 
 
 4. The current Failover mechanism is very rudimentary. When there is any exception by the first gateway, it will retry with the second gateway
     
-   For a Production system of high loads, we would take an asynchronous approach where the user would hit the POST /mail endpoint to send the mail. It will give the user an messageId. 
-   The user will then hit a GET /mail/status endpoint with the messageId to see if it has been sent. The mails would be forwarded to a queue, and from there be send to the gateways
+   For a Production system of high loads, I would take an asynchronous approach where the user would hit the POST /mail endpoint to send the mail. It will give the user an messageId. 
+   The user will then hit a GET /mail/status endpoint with the messageId to get the status (to see if it has been sent). 
    
-   If one gateway is down, it will attempt to use the other gateway. If both gateways are down, the message will remain in the queue. Beyond the scope of this problem, we can also use a bounce queue,
+   The mails would be forwarded to a queue, and from there be sent to the gateways. If one gateway is down, it will attempt to use the other gateway. If both gateways are down, the message will remain in the queue. Beyond the scope of this problem, we can also use a bounce queue,
    for if a message bounced back from the provider.
         
 5. Authentication / Authorization would also be implemented in a Production system

@@ -2,6 +2,7 @@ package com.sanka.mailservice.model.sendgrid;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.sanka.mailservice.model.EmailAddress;
 import lombok.Builder;
 import lombok.Value;
 

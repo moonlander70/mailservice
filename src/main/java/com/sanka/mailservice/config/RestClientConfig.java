@@ -18,7 +18,7 @@ public class RestClientConfig {
     @Value("${send-in-blue.apiKey}")
     private String sendInBlueApiKey;
 
-    @Value("${send-in-blue.apiKey}")
+    @Value("${send-in-blue.baseUrl}")
     private String sendInBlueBaseUrl;
 
     @Bean("sendGridClientTemplate")

@@ -1,20 +1,22 @@
-package com.sanka.mailservice.model.sendgrid;
-
+package com.sanka.mailservice.model.sendinblue;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.sanka.mailservice.model.EmailAddress;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Value;
 
 import java.util.Set;
 
 @Builder
-@Getter
+@Value
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class Personalization {
+public class SendInBlueRequest {
+    private EmailAddress sender;
+    private EmailAddress replyTo;
     private Set<EmailAddress> to;
     private Set<EmailAddress> cc;
     private Set<EmailAddress> bcc;
     private String subject;
+    private String textContent;
 
 }
