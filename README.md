@@ -67,7 +67,8 @@ to be completed
 
 ## TODOs for Production
 
-Code Design:
+**Code Design:**
+
 1. Add documentation using OpenAPI or Spring REST docs for integrators
 
 2. Add more detailed logging through the code and specify a particular format which can be consumed by a log aggregator
@@ -85,10 +86,17 @@ Json Deserialization error which is difficult to read.
         
 5. Authentication / Authorization would also be implemented in a Production system
 
-6. The integration tests to the Clients are currently sending mails to the live clients. To improve this, we would use Hoverfly or an equivalent HTTP simulation tool which integrates to JUnit
+6. The Client integration tests are currently sending mails to the live service providers. To improve this, we would use Hoverfly or an equivalent HTTP simulation tool which integrates to JUnit
 
-DevOps:
+7. Have a load testing suite
 
+**DevOps:**
 
+1. The app currently runs in a single container on Heroku. For Production, the same code would be run on at least 2 containers and behind a load balancer
 
-SecOps:
+2. Use diagnostic and telemetry tools to monitor the app and its health. A very simple example would be to activate parts of the spring boot ``` /actuator ```
+
+3. Use a log aggregation and viewing mechanism such as ELK or Splunk, to monitor usage and any errors. 
+
+**SecOps:**
+
