@@ -50,11 +50,9 @@ class EmailControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.details[0].param", equalTo("from")))
-                .andExpect(jsonPath("$.details[0].msg", equalTo("'from' cannot be blank or null")));
+                .andExpect(jsonPath("$.details[0].msg", equalTo("must be a well-formed email address")));
     }
 
-    // NOTE: In Production code, I would test this email validation thoroughly with several more cases
-    // The Regular Expression used would be tested in isolation
     @Test
     @DisplayName("GIVEN 'from' is not in the email format EXPECT a 400 bad request with email validation error")
     void from_notEmail() throws Exception {
