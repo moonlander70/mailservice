@@ -1,6 +1,9 @@
 # mail-service
 
-This app is currently under construction and will be ready soon. It will serve as an email integration app, with rudimentary fail over.  
+This app serves as an email integration app, with a basic fail over between a primary and secondary provider. 
+
+It is available on https://siteminder-mail.herokuapp.com/mail
+      
 
 ## Tech Stack:
 
@@ -22,7 +25,7 @@ You will need Java 11 and Maven 3 installed.
 You will also need to set SendGrid and SendInBlue API Keys as system variables. 
 These are referenced in the application.yml
 
-To protect your keys, be sure to not paste them directly into application.yml.
+To protect your keys, set them as system variables rather than directly into application.yml.
 
 To Build: 
 In the root of the project, do:  `mvn clean install`
@@ -33,7 +36,7 @@ To Run: `mvn spring-boot:run`
 The app is currently deployed to heroku and available on:
 `https://siteminder-mail.herokuapp.com/`
 
-As Heroku has cold start times, the first request may be slow :)
+As Heroku may have cold start times, the first request may be slow :)
 
 Make a http POST request to `/mail`. 
 
@@ -63,7 +66,58 @@ Example:
 
 ### Response
 
-to be completed
+**On Success:**
+
+* Returns a `200 OK` Header and no Body. For this particular case, a body tends to add noise.
+
+**On Failure:**
+
+* Returns a `400 Bad Request` with error messages in the body if the input fails to meet the validation criteria.
+An example is shown below for when all the mandatory fields are missing in the request:
+
+```json
+{
+  "name": "ValidationError",
+  "details": [
+    {
+      "location": "params",
+      "param": "message",
+      "msg": "'message' cannot be blank or null",
+      "value": "null"
+    },
+    {
+      "location": "params",
+      "param": "to",
+      "msg": "'to' field cannot be blank or null",
+      "value": "null"
+    },
+    {
+      "location": "params",
+      "param": "subject",
+      "msg": "'subject' cannot be blank or null",
+      "value": "null"
+    },
+    {
+      "location": "params",
+      "param": "from",
+      "msg": "'from' cannot be blank or null",
+      "value": "null"
+    }
+  ]
+}
+```
+
+* Returns a `502 Bad Gateway` with an error body if the app can't successfully send the email to either provider.
+An example is shown below:
+
+```json
+{
+  "msg": "Our services are temporarily down. Please try again later"
+}
+```
+
+* May return a `500 Internal Server Error` in anomalous error scenarios. 
+
 
 ## TODOs for Production
 
