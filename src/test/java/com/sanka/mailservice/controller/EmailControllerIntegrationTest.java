@@ -1,6 +1,7 @@
 package com.sanka.mailservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sanka.mailservice.exception.ServiceDownException;
 import com.sanka.mailservice.model.EmailRequest;
 import com.sanka.mailservice.service.EmailService;
 import lombok.val;
@@ -15,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Set;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -199,6 +201,28 @@ class EmailControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON));
 
         verify(emailService, times(1)).sendEmail(emailRequest);
+    }
+
+    @Test
+    @DisplayName("GIVEN ServiceDownException occurs EXPECT a 502 Bad Gateway with message")
+    void serviceDown() throws Exception {
+        // Given
+        val emailRequest = EmailRequest.builder()
+                .from("test@test.com")
+                .to(Set.of("test@test.com"))
+                .subject("Test Subject")
+                .message("Hi, this is a test message")
+                .build();
+
+        doThrow(new ServiceDownException()).when(emailService).sendEmail(emailRequest);
+
+        // Then
+        mockMvc.perform(post("/mail")
+                .content(mapper.writeValueAsString(emailRequest))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadGateway())
+                .andExpect(jsonPath("$.details[0].msg", equalTo("Our services are temporarily down. Please try again later")));
+
     }
 
 }

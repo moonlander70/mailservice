@@ -11,6 +11,5 @@ public class ErrorDetail {
     private String location;
     private String param;
     private String msg;
-    private String message;
     private String value;
 }

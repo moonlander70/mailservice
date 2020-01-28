@@ -64,7 +64,7 @@ public class ExceptionHandlerAdvice {
     public ErrorMessage handleException(final NoRecipientsFoundException exception) {
         final List<ErrorDetail> errorDetails = List.of(ErrorDetail.builder()
                 .location("params")
-                .message(exception.getMessage())
+                .msg(exception.getMessage())
                 .build());
 
         return ErrorMessage.builder()
@@ -79,7 +79,7 @@ public class ExceptionHandlerAdvice {
     public ErrorMessage handleException(final ServiceDownException exception) {
         return ErrorMessage.builder()
                 .details(List.of(ErrorDetail.builder()
-                        .message(exception.getMessage())
+                        .msg(exception.getMessage())
                         .build()))
                 .build();
     }
