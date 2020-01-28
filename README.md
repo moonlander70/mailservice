@@ -73,13 +73,13 @@ to be completed
 
 2. Add more detailed logging through the code and specify a particular format which can be consumed by a log aggregator
 
-3. Improve validation error messages for more cases. For example, if a user Posts without a body or a field of the incorrect type, it currently gives a
-Json Deserialization error which is difficult to read.   
+3. Improve validation error messages for more cases and also the consistency. For example, if a user Posts without a body or a field of the incorrect type, it currently gives a
+Json Deserialization error which is difficult to read. Another example is where it has 'to' or 'to[]' as the param depending on the error. This requires consistency
 
-4. The current Failover mechanism is very rudimentary. When there is any exception by the first gateway, it will retry with the second gateway. 
+4. The current Failover mechanism is very rudimentary. When there is any exception by the first gateway, it will retry with the second gateway
     
    For a Production system of high loads, we would take an asynchronous approach where the user would hit the POST /mail endpoint to send the mail. It will give the user an messageId. 
-   The user will then hit a GET /mail/status endpoint with the messageId to see if it has been sent. The mails would be forwarded to a queue, and from there be send to the gateways. 
+   The user will then hit a GET /mail/status endpoint with the messageId to see if it has been sent. The mails would be forwarded to a queue, and from there be send to the gateways
    
    If one gateway is down, it will attempt to use the other gateway. If both gateways are down, the message will remain in the queue. Beyond the scope of this problem, we can also use a bounce queue,
    for if a message bounced back from the provider.
@@ -88,15 +88,20 @@ Json Deserialization error which is difficult to read.
 
 6. The Client integration tests are currently sending mails to the live service providers. To improve this, we would use Hoverfly or an equivalent HTTP simulation tool which integrates to JUnit
 
-7. Have a load testing suite
+7. Have an acceptance testing and load testing suite
 
-**DevOps:**
+8. Have support for attachments and Multimedia files 
 
-1. The app currently runs in a single container on Heroku. For Production, the same code would be run on at least 2 containers and behind a load balancer
+**DevOps Concerns:**
 
-2. Use diagnostic and telemetry tools to monitor the app and its health. A very simple example would be to activate parts of the spring boot ``` /actuator ```
+1. The app currently runs in a single container on Heroku. For Production, it would be run on at least 2 containers and behind a load balancer
 
-3. Use a log aggregation and viewing mechanism such as ELK or Splunk, to monitor usage and any errors. 
+2. Use diagnostic and telemetry tools to monitor the app and its health. A very simple example would be to activate parts of the spring boot ``` /actuator ``` and Spring Boot Admin
 
-**SecOps:**
+3. Use a log aggregation and viewing mechanism such as ELK or Splunk, to monitor usage and any errors, and provide alerts 
 
+**SecOps Concerns:**
+
+1. In Production, use a Vault / Secrets Management System to store encrypted keys instead of storing them as system variables 
+
+2. Configure security mechanisms to prevent, detect and respond to malicious activity. This may include but not limited to rate limiting users, detecting and preventing spammers or bots, and spike arrests
