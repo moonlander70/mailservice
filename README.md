@@ -121,6 +121,12 @@ An example is shown below:
 
 ## TODOs for Production
 
+**User Experience**
+
+1. Implement user login and auth
+
+2. Implement a tracking mechanism (such as using a messageId) so the user can see if their message was successful or rejected. The 200 OK header response doesn't account for bounced back messages.
+
 **Code Design:**
 
 1. Add documentation using OpenAPI or Spring REST docs for integrators
