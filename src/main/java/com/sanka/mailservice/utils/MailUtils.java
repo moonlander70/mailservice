@@ -16,6 +16,11 @@ import java.util.stream.Collectors;
 
 public class MailUtils {
 
+    // The Regular Expression for email validation was taken from https://howtodoinjava.com/regex/java-regex-validate-email-address/
+    // IETF RFC 5322 governs the email format but has no restrictions on dangerous characters like ' and *
+    // Therefore the regex is done with tighter constraints than RFC 5322 suggests
+    public static final String MAIL_REGEX = "^[\\\\w!#$%&’*+/=?`{|}~^-]+(?:\\\\.[\\\\w!#$%&’*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\\\.)+[a-zA-Z]{2,6}$";
+
     public static SendGridMailRequest toSendGridMailRequest(final Email email) {
 
         val fromAddress = EmailAddress.builder()

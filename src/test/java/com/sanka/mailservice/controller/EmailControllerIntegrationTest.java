@@ -23,11 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/***
- *  This class is the slice test for the REST controller layer.
- *
- * @author moonlander70
- */
+
 @WebMvcTest
 class EmailControllerIntegrationTest {
 
@@ -57,8 +53,8 @@ class EmailControllerIntegrationTest {
                 .andExpect(jsonPath("$.details[0].msg", equalTo("'from' cannot be blank or null")));
     }
 
-    // NOTE: In Production code, I would test this email validation with several more cases
-    // But given this is an assignment and also given, the Email annotation is from javax, I haven't done so
+    // NOTE: In Production code, I would test this email validation thoroughly with several more cases
+    // The Regular Expression used would be tested in isolation
     @Test
     @DisplayName("GIVEN 'from' is not in the email format EXPECT a 400 bad request with email validation error")
     void from_notEmail() throws Exception {

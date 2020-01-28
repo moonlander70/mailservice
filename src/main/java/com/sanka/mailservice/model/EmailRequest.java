@@ -1,11 +1,9 @@
 package com.sanka.mailservice.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import com.sanka.mailservice.utils.MailUtils;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Singular;
 import lombok.Value;
 
 import javax.validation.constraints.Email;
@@ -18,16 +16,16 @@ import java.util.Set;
 @Value // Needed for Json Deserialization. Would otherwise just use Getter
 public class EmailRequest {
 
-    @Email
+    @Email(regexp = MailUtils.MAIL_REGEX)
     @NotBlank(message = "'from' cannot be blank or null")
     private String from;
 
     @NotEmpty(message = "'to' field cannot be empty or null")
-    private Set<@Email String> to;
+    private Set<@Email(regexp = MailUtils.MAIL_REGEX) String> to;
 
-    private Set<@Email String> cc;
+    private Set<@Email(regexp = MailUtils.MAIL_REGEX) String> cc;
 
-    private Set<@Email String> bcc;
+    private Set<@Email(regexp = MailUtils.MAIL_REGEX) String> bcc;
 
     @NotBlank(message = "'subject' cannot be blank or null")
     private String subject;
