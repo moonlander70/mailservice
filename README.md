@@ -8,7 +8,7 @@ It is available on https://siteminder-mail.herokuapp.com/mail
 ## Tech Stack:
 
 1. Java 11
-2. Spring Boot 2.2.3
+2. Spring Boot 2.2.4
 3. Maven 3.6
 4. Heroku
 
