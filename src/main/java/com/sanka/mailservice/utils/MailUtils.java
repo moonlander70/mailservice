@@ -1,8 +1,8 @@
 package com.sanka.mailservice.utils;
 
 import com.sanka.mailservice.model.Email;
-import com.sanka.mailservice.model.sendgrid.Content;
 import com.sanka.mailservice.model.EmailAddress;
+import com.sanka.mailservice.model.sendgrid.Content;
 import com.sanka.mailservice.model.sendgrid.Personalization;
 import com.sanka.mailservice.model.sendgrid.SendGridMailRequest;
 import com.sanka.mailservice.model.sendinblue.SendInBlueRequest;

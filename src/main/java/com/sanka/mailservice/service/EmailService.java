@@ -10,9 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-
 @Service
 @AllArgsConstructor
 public class EmailService {

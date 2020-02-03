@@ -2,12 +2,10 @@ package com.sanka.mailservice.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
-import com.sanka.mailservice.utils.MailUtils;
 import com.sanka.mailservice.validation.ValidEmail;
 import lombok.Builder;
 import lombok.Value;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.util.Set;

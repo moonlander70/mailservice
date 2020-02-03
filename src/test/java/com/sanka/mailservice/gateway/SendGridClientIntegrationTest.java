@@ -2,7 +2,6 @@ package com.sanka.mailservice.gateway;
 
 import com.sanka.mailservice.model.Email;
 import lombok.val;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
